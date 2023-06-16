@@ -5,6 +5,11 @@
   "repository": "https://github.com/fishdoge/restaurant-selector.git",
   "author": "Fishdoge",
   "license": "MIT",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:make-migration": "prisma migrate dev --create-only && prisma generate",
+    "db:migrate": "prisma migrate deploy"
+  },
   "dependencies": {
     "@prisma/client": "^4.15.0",
     "express": "^4.18.2"
