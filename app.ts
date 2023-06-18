@@ -101,7 +101,7 @@ app.delete("/restaurants/:id", async (req: Request, res: Response) => {
       where: {
         id: id,
       },
-    })
+    }),
   );
 });
 
