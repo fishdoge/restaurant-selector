@@ -1,5 +1,6 @@
 import express from "express";
 import prisma from "../index";
+import { Prisma } from "@prisma/client";
 export const router = express.Router();
 
 interface RestaurantData {
@@ -8,12 +9,7 @@ interface RestaurantData {
   notes?: string;
 }
 
-interface RestaurantFilter {
-  id?: string;
-  name?: string;
-}
-
-const validateIsExist = async (filter: RestaurantFilter): Promise<boolean> => {
+const validateIsExist = async (filter: Prisma.RestaurantWhereUniqueInput): Promise<boolean> => {
   const result = await prisma.restaurant.findUnique({ where: filter });
   return result ? true : false;
 };
