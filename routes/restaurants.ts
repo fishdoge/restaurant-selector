@@ -1,12 +1,28 @@
 import express from "express";
 import prisma from "../index";
-import { Prisma } from "@prisma/client";
+import { Prisma, Restaurant } from "@prisma/client";
 export const router = express.Router();
 
 interface RestaurantData {
   name: string;
   mapUrl: string;
   notes?: string;
+}
+
+class RestaurantDTO {
+  public readonly id: string;
+  public readonly createdAt: string;
+  public readonly name: string;
+  public readonly mapUrl: string;
+  public readonly notes?: string | null;
+
+  constructor(entity: Restaurant) {
+    this.id = entity.id;
+    this.createdAt = entity.createdAt.toISOString();
+    this.name = entity.name;
+    this.mapUrl = entity.mapUrl;
+    this.notes = entity.notes;
+  }
 }
 
 const validateIsExist = async (filter: Prisma.RestaurantWhereUniqueInput): Promise<boolean> => {
@@ -25,17 +41,21 @@ const validateParams = (params: any): params is RestaurantData => {
 //** Get the list of restaurants, return empty array if no data
 router.get("/", async (req, res) => {
   const allRestaurants = await prisma.restaurant.findMany();
-  res.status(200).json({ data: allRestaurants });
+  const dtos = allRestaurants.map((restaurant) => new RestaurantDTO(restaurant));
+
+  res.status(200).json({ data: dtos });
 });
 
 router.get("/random", async (req, res) => {
   const count = await prisma.restaurant.count();
   const rand = Math.random() * count;
-  const result = await await prisma.restaurant.findMany({
+  const result = await prisma.restaurant.findMany({
     skip: Math.floor(rand),
     take: 1,
   });
-  res.status(200).json({ data: result });
+  const dto = new RestaurantDTO(result[0]);
+
+  res.status(200).json({ data: dto });
 });
 
 // Get the detail of a restaurant, return 404 if not found
@@ -49,7 +69,9 @@ router.get("/:id", async (req, res) => {
   if (!specificRes) {
     return res.status(404).json();
   }
-  res.status(200).json({ data: specificRes });
+
+  const dto = new RestaurantDTO(specificRes);
+  res.status(200).json({ data: dto });
 });
 
 //** Create a new restaurant
@@ -72,7 +94,8 @@ router.post("/", async (req, res) => {
         notes,
       },
     });
-    return res.status(201).json({ data: newRestaurant });
+    const data = new RestaurantDTO(newRestaurant);
+    return res.status(201).json({ data });
   } else {
     return res.status(409).json();
   }
@@ -122,7 +145,9 @@ router.put("/:id", async (req, res) => {
         notes,
       },
     });
-    res.status(200).json({ data: updatedRestaurant });
+
+    const data = new RestaurantDTO(updatedRestaurant);
+    res.status(200).json({ data });
   } else {
     return res.status(404).json();
   }
