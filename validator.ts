@@ -24,7 +24,7 @@ export const validateIdExist = async (req: Request, res: Response, next: NextFun
   next();
 };
 
-export const restaurantsParamsValidator = () => [
+export const restaurantsParamsValidators = () => [
   body("name").isString().notEmpty(),
   body("mapUrl")
     .isString()

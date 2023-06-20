@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is awesome restaurant selector.
+This is an awesome restaurant selector.
 
 ## Technologies Used
 
@@ -46,7 +46,7 @@ yarn start
 
 ## API
 
-## Contributing
+## Contribution
 
 - [LI-YONG-QI](https://github.com/LI-YONG-QI)
 - [andyhsu10](https://github.com/andyhsu10)

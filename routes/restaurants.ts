@@ -4,7 +4,7 @@ import { Restaurant } from "@prisma/client";
 import {
   validateNameExist,
   validateIdExist,
-  restaurantsParamsValidator,
+  restaurantsParamsValidators,
   restaurantIdValidator,
   validator,
 } from "../validator";
@@ -64,7 +64,7 @@ router.get("/:id", restaurantIdValidator(), validator, validateIdExist, async (r
 //** Create a new restaurant
 // 1. If the restaurant name already exists, return 409 conflicts
 // 2. If the given information did not pass the validation, return 400 bad requests
-router.post("/", restaurantsParamsValidator(), validator, validateNameExist, async (req: Request, res: Response) => {
+router.post("/", restaurantsParamsValidators(), validator, validateNameExist, async (req: Request, res: Response) => {
   const { name, mapUrl, notes } = req.body;
 
   const newRestaurant = await prisma.restaurant.create({
@@ -97,7 +97,7 @@ router.delete("/:id", restaurantIdValidator(), validator, validateIdExist, async
 //# 2. If the given information did not pass the validation, return 400 bad requests
 router.put(
   "/:id",
-  restaurantsParamsValidator(),
+  restaurantsParamsValidators(),
   restaurantIdValidator(),
   validator,
   validateIdExist,
