@@ -17,6 +17,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --create-only && prisma generate",
     "db:deploy": "prisma migrate deploy",
+    "start": "docker compose up -d && yarn nodemon ./app.ts",
     "format": "prettier --write '**/*.{ts,json,yml}'"
   },
   "devDependencies": {
